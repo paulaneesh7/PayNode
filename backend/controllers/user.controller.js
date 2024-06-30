@@ -1,5 +1,4 @@
 import z from "zod";
-import "dotenv/config";
 import jwt from "jsonwebtoken";
 import { User } from "../models/schema.js";
 
@@ -15,6 +14,12 @@ const signupBody = z.object({
 const signinBody = z.object({
   username: z.string().email(),
   password: z.number(),
+});
+
+const updateBody = z.object({
+  password: z.number().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
 });
 
 /* Sign-up */
@@ -44,7 +49,7 @@ export const userSignup = async (req, res) => {
       .status(200)
       .json({ message: "User created successfully", token: token });
   } catch (err) {
-    return res.status(400).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 };
 
@@ -64,6 +69,31 @@ export const userSignin = async (req, res) => {
       return res.status(200).json({ token });
     }
   } catch (err) {
-    return res.status(400).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+/* User update information */
+export const userUpdateInfo = async (req, res) => {
+  const { success, data } = updateBody.safeParse(req.body);
+
+  if (!success) {
+    return res
+      .status(411)
+      .json({ message: "Error while updating information" });
+  }
+
+  try {
+    const { password, firstName, lastName } = data;
+    await User.updateOne(
+      { _id: req.userId },
+      { password, firstName, lastName }
+    );
+
+    return res.status(200).json({
+      message: "Updated successfully",
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
   }
 };
