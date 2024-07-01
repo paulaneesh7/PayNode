@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  userRetrieve,
   userSignin,
   userSignup,
   userUpdateInfo,
@@ -11,6 +12,7 @@ const router = express.Router();
 router
   .post("/signup", userSignup)
   .post("/signin", userSignin)
-  .put("/", authMiddleware, userUpdateInfo);
+  .put("/", authMiddleware, userUpdateInfo)
+  .get("/bulk", userRetrieve);
 
 export { router };

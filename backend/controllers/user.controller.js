@@ -97,3 +97,36 @@ export const userUpdateInfo = async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 };
+
+/* User Retrieve  */
+export const userRetrieve = async (req, res) => {
+  const filter = req.query.filter || "";
+
+  try {
+    const users = await User.find({
+      $or: [
+        {
+          firstName: {
+            $regex: filter,
+          },
+        },
+        {
+          lastName: {
+            $regex: filter,
+          },
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      user: users.map((user) => ({
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        _id: user._id,
+      })),
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
