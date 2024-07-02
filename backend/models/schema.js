@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 
 const userSchema = new Schema({
   username: {
@@ -17,4 +17,14 @@ const userSchema = new Schema({
   password: { type: Number, required: true },
 });
 
+const accountSchema = new Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  balance: { type: Number, required: true },
+});
+
+export const Account = mongoose.model("Account", accountSchema);
 export const User = mongoose.model("User", userSchema);

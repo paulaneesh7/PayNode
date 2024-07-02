@@ -1,6 +1,6 @@
 import z from "zod";
 import jwt from "jsonwebtoken";
-import { User } from "../models/schema.js";
+import { Account, User } from "../models/schema.js";
 
 const { JWT_SECRET } = process.env;
 
@@ -43,6 +43,14 @@ export const userSignup = async (req, res) => {
     const savedUser = await newUser.save();
 
     const userId = savedUser._id;
+
+    /// ----- Create new account (Providing a random balance to the new account creator) ------
+
+    await Account.create({
+      userId,
+      balance: 1 + Math.random() * 10000,
+    });
+
     const token = jwt.sign({ userId }, JWT_SECRET);
 
     return res
