@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { Account } from "../models/schema.js";
 
+
+/* Check account balance */
 export const userAccountBalance = async (req, res) => {
   const account = await Account.findOne({
     userId: req.userId, // as we have provided the userId in the request in middleware.js
@@ -13,6 +15,8 @@ export const userAccountBalance = async (req, res) => {
   }
 };
 
+
+/* Transfer Amount */
 export const userTransferAmount = async (req, res) => {
   const session = await mongoose.startSession();
 

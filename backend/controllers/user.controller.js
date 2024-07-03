@@ -1,4 +1,5 @@
 import z from "zod";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Account, User } from "../models/schema.js";
 
@@ -8,16 +9,16 @@ const signupBody = z.object({
   username: z.string().email(),
   firstName: z.string(),
   lastName: z.string(),
-  password: z.number(),
+  password: z.string(),
 });
 
 const signinBody = z.object({
   username: z.string().email(),
-  password: z.number(),
+  password: z.string(),
 });
 
 const updateBody = z.object({
-  password: z.number().optional(),
+  password: z.string().optional(),
   firstName: z.string().optional(),
   lastName: z.string().optional(),
 });
@@ -39,7 +40,16 @@ export const userSignup = async (req, res) => {
   }
 
   try {
-    const newUser = new User({ username, firstName, lastName, password });
+    // Hash the password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const newUser = new User({
+      username,
+      firstName,
+      lastName,
+      password: hashedPassword,
+    });
     const savedUser = await newUser.save();
 
     const userId = savedUser._id;
@@ -71,11 +81,19 @@ export const userSignin = async (req, res) => {
   try {
     const { username, password } = data;
 
-    const user = await User.findOne({ username, password });
-    if (user) {
-      const token = jwt.sign({ userId: user._id }, JWT_SECRET);
-      return res.status(200).json({ token });
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid username or password" });
     }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid username or password" });
+    }
+
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET);
+    return res.status(200).json({ token });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
@@ -93,9 +111,14 @@ export const userUpdateInfo = async (req, res) => {
 
   try {
     const { password, firstName, lastName } = data;
+
+    // Hash the password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     await User.updateOne(
       { _id: req.userId },
-      { password, firstName, lastName }
+      { password: hashedPassword, firstName, lastName }
     );
 
     return res.status(200).json({
