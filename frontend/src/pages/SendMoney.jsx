@@ -1,25 +1,38 @@
-import { useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { URL } from "../config/URL";
 import { useState } from "react";
+import { URL } from "../config/URL";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const SendMoney = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const name = searchParams.get("name");
+  const navigate = useNavigate();
 
   const [amount, setAmount] = useState(0);
 
   const handleTransferAmount = async () => {
-    const res = await axios.post(
-      URL + `/account/transfer`,
-      { to: id, amount },
-      {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      }
-    );
+    try {
+      const res = await axios.post(
+        URL + `/account/transfer`,
+        { to: id, amount },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+      console.log(res.data);
+      toast.success("Transaction Successful");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 3000);
+    } catch (err) {
+      console.log(err.message);
+      toast.error("Error Occurred");
+    }
   };
 
   return (
@@ -64,6 +77,7 @@ const SendMoney = () => {
                 Initiate Transfer
               </button>
             </div>
+            <ToastContainer />
           </div>
         </div>
       </div>

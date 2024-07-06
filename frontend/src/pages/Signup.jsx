@@ -6,6 +6,8 @@ import { InputBox } from "../components/InputBox";
 import { SubHeading } from "../components/SubHeading";
 import { BottomWarning } from "../components/BottomWarning";
 import { URL } from "../config/URL";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -17,15 +19,21 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const handleSignup = async () => {
-    const res = await axios.post(URL + `/user/signup`, {
-      username,
-      firstName,
-      lastName,
-      password,
-    });
-    console.log(res.data);
-    localStorage.setItem("token", res.data.token);
-    navigate("");
+    try {
+      const res = await axios.post(URL + `/user/signup`, {
+        username,
+        firstName,
+        lastName,
+        password,
+      });
+      // console.log(res.data);
+      localStorage.setItem("token", res.data.token);
+      toast.success("User Created Successfully");
+      navigate("/dashboard");
+    } catch (err) {
+      console.log(err.message);
+      toast.error("Error Occurred");
+    }
   };
 
   return (
@@ -61,6 +69,7 @@ const Signup = () => {
           <div className="pt-4">
             <Button label={"Sign up"} onClick={handleSignup} />
           </div>
+          <ToastContainer />
           <BottomWarning
             label={"Already have an account?"}
             buttonText={"Sign in"}

@@ -10,9 +10,13 @@ export const Users = () => {
   const [filter, setFilter] = useState("");
 
   const getUsers = async () => {
-    const res = await axios.get(URL + `/user/bulk?filter=` + filter);
-    // console.log(res.data.user);
-    setUsers(res.data.user);
+    try {
+      const res = await axios.get(URL + `/user/bulk?filter=` + filter);
+      // console.log(res.data.user);
+      setUsers(res.data.user);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   useEffect(() => {
