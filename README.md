@@ -1,2 +1,2 @@
 
-## Build a basic version of PayTM
+## PayNode is an application for online monetary payment
