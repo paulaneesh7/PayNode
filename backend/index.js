@@ -3,9 +3,10 @@ import express from "express";
 import mongoose from "mongoose";
 import { router as payRouter } from "./routes/index.route.js";
 import cors from "cors";
+
 const server = express();
 
-const { PORT, MONGO_URL } = process.env;
+const { PORT, MONGO_URL, CLIENT_URL } = process.env;
 
 main().catch((err) => console.log(err));
 
@@ -17,7 +18,7 @@ async function main() {
 server.use(express.json());
 server.use(
   cors({
-    origin: process.env.CLIENT_URL, // specify the origin for CORS
+    origin: CLIENT_URL, // specify the origin for CORS
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // specify the methods for CORS
     credentials: true, // this allows session cookies to be sent with requests
     optionsSuccessStatus: 200, // some legacy browsers choke on 204

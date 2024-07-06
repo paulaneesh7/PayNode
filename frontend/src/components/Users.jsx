@@ -1,16 +1,22 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./Button";
+import axios from "axios";
+import { URL } from "../config/URL";
 
 export const Users = () => {
   // Replace with backend call
-  const [users, setUsers] = useState([
-    {
-      firstName: "Harkirat",
-      lastName: "Singh",
-      _id: 1,
-    },
-  ]);
+  const [users, setUsers] = useState([]);
+
+  const getUsers = async () => {
+    const res = await axios.get(URL + `/user/bulk`);
+    // console.log(res.data.user);
+    setUsers(res.data.user);
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   return (
     <>
@@ -24,7 +30,7 @@ export const Users = () => {
       </div>
       <div>
         {users.map((user) => (
-          <User user={user} key={user._id}/>
+          <User user={user} key={user._id} />
         ))}
       </div>
     </>

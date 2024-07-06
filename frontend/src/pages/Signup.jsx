@@ -1,15 +1,32 @@
+import axios from "axios";
+import { useState } from "react";
 import { Button } from "../components/Button";
 import { Heading } from "../components/Heading";
 import { InputBox } from "../components/InputBox";
 import { SubHeading } from "../components/SubHeading";
 import { BottomWarning } from "../components/BottomWarning";
-import { useState } from "react";
+import { URL } from "../config/URL";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSignup = async () => {
+    const res = await axios.post(URL + `/user/signup`, {
+      username,
+      firstName,
+      lastName,
+      password,
+    });
+    console.log(res.data);
+    localStorage.setItem("token", res.data.token);
+    navigate("");
+  };
 
   return (
     <div className="flex justify-center h-screen bg-slate-300">
@@ -42,7 +59,7 @@ const Signup = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <div className="pt-4">
-            <Button label={"Sign up"} />
+            <Button label={"Sign up"} onClick={handleSignup} />
           </div>
           <BottomWarning
             label={"Already have an account?"}
