@@ -27,7 +27,7 @@ const Signin = () => {
       navigate("/dashboard");
     } catch (err) {
       console.log(err.message);
-      toast.error("Check Credentials and Try again !");
+      toast.error("Check credentials !");
     }
   };
 
