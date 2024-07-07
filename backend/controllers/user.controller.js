@@ -93,7 +93,7 @@ export const userSignin = async (req, res) => {
     }
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET);
-    return res.status(200).json({ token });
+    return res.status(200).json({ token: token, firstName: user.firstName });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
@@ -157,6 +157,24 @@ export const userRetrieve = async (req, res) => {
         _id: user._id,
       })),
     });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+
+/* A route to just check the user */
+export const userInformation = async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    const { firstName, lastName } = user;
+    return res.status(200).json({ firstName, lastName });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }

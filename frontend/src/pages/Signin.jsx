@@ -24,9 +24,7 @@ const Signin = () => {
       // console.log(res.data);
       localStorage.setItem("token", res.data.token);
       toast.success("User logged in Successfully");
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1000);
+      navigate("/dashboard");
     } catch (err) {
       console.log(err.message);
       toast.error("Check Credentials and Try again !");

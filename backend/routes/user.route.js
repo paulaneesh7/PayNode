@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  userInformation,
   userRetrieve,
   userSignin,
   userSignup,
@@ -13,6 +14,7 @@ router
   .post("/signup", userSignup)
   .post("/signin", userSignin)
   .put("/", authMiddleware, userUpdateInfo)
-  .get("/bulk", userRetrieve);
+  .get("/bulk", userRetrieve)
+  .get("/info", authMiddleware, userInformation);
 
 export { router };

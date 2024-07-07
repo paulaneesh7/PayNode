@@ -5,6 +5,7 @@ import axios from "axios";
 import { URL } from "../config/URL";
 import { useNavigate } from "react-router-dom";
 
+
 export const Users = () => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
@@ -22,6 +23,7 @@ export const Users = () => {
   useEffect(() => {
     getUsers();
   }, [filter]);
+
 
   return (
     <>
