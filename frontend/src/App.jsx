@@ -6,7 +6,7 @@ import SendMoney from "./pages/SendMoney";
 
 const router = createBrowserRouter([
   { path: "/signup", element: <Signup /> },
-  { path: "/signin", element: <Signin /> },
+  { path: "/", element: <Signin /> },
   { path: "/dashboard", element: <Dashboard /> },
   { path: "/send", element: <SendMoney /> },
 ]);
