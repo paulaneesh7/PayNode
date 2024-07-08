@@ -26,5 +26,14 @@ const accountSchema = new Schema({
   balance: { type: Number, required: true },
 });
 
+userSchema.pre("remove", async function (next) {
+  try {
+    await Account.deleteOne({ userId: this._id });
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 export const Account = mongoose.model("Account", accountSchema);
 export const User = mongoose.model("User", userSchema);

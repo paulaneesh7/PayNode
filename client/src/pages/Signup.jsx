@@ -6,8 +6,7 @@ import { InputBox } from "../components/InputBox";
 import { SubHeading } from "../components/SubHeading";
 import { BottomWarning } from "../components/BottomWarning";
 import { URL } from "../config/URL";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
+import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -69,7 +68,7 @@ const Signup = () => {
           <div className="pt-4">
             <Button label={"Sign up"} onClick={handleSignup} />
           </div>
-          <ToastContainer />
+          <Toaster />
           <BottomWarning
             label={"Already have an account?"}
             buttonText={"Sign in"}

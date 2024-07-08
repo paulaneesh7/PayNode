@@ -1,8 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { URL } from "../config/URL";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
+import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 const SendMoney = () => {
@@ -77,7 +76,7 @@ const SendMoney = () => {
                 Initiate Transfer
               </button>
             </div>
-            <ToastContainer />
+            <Toaster />
           </div>
         </div>
       </div>
